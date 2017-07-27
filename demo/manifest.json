@@ -1,0 +1,7 @@
+{
+  "name": "demo",
+  "short_name": "demo",
+  "description": "A demo for NUVI",
+  "start_url": "/",
+  "display": "standalone"
+}

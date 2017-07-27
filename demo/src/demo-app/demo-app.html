@@ -1,0 +1,113 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+
+<dom-module id="demo-app">
+  <template>
+
+    <style>
+
+      :host {
+        display: block;
+      }
+
+      * {
+        font-family: 'Roboto', 'Helvetica', sans-serif;
+      }
+
+      button {
+        background-color: #eee;
+        border: none;
+        padding: .7em;
+        font-size: .8em;
+        border-radius: .2em;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #ccc;
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: blue;
+      }
+
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" active="{{active}}" data="{{data}}" tail="{{tail}}"></app-route>
+
+    <paper-tabs selected="{{data.page}}" attr-for-selected="page" noink>
+      <paper-tab page="hello">TAB 1</paper-tab>
+      <paper-tab page="shadow">TAB 2</paper-tab>
+      <paper-tab page="dialog">TAB 3</paper-tab>
+    </paper-tabs>
+    <iron-pages selected="[[data.page]]" attr-for-selected="page">
+      <section page="hello">
+        <h2>Hello [[prop1]]!</h2>
+        <p>Change the greeting name:</p>
+        <paper-input value="{{prop1}}"></paper-input>
+      </section>
+      <section page="shadow">
+        <h2>Page 2...</h2>
+        <p class="red">This paragraph has <code>class="red"</code> but will not be affected because Shadow DOM!</p>
+      </section>
+      <section page="dialog">
+        <h2>Page 3!</h2>
+        <button on-tap="openDialog">Open dialog</button>
+      </section>
+      <section></section>
+    </iron-pages>
+
+    <paper-dialog id="dialog">
+      <h2>Dialog</h2>
+      <p>Dialogs are another element from the Polymer library.  Go to <a href="https://www.webcomponents.org/">webcomponents.org</a> for more.</p>
+      <div class="buttons">
+        <button dialog-dismiss>OK</button>
+      </div>
+    </paper-dialog>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class DemoApp extends Polymer.Element {
+
+      static get is() { return 'demo-app'; }
+
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'demo-app',
+            notify: true
+          },
+          selected: {
+            type: String,
+            value: 'hello'
+          }
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.set('data', this.data.page === '' ? { page: 'hello' } : this.data);
+      }
+
+      openDialog() {
+        this.shadowRoot.querySelector('paper-dialog').open();
+      }
+
+    }
+
+    window.customElements.define(DemoApp.is, DemoApp);
+
+  </script>
+</dom-module>
